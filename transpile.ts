@@ -7,21 +7,29 @@ import atImport from "postcss-import";
 import tailwindcssNesting from "tailwindcss/nesting";
 import tailwindcss from "tailwindcss";
 import autoprefixer from "autoprefixer";
+import postcssRemapper from "./postcss-remapper";
+
+// TODO: dynamic classmaps
+const classmap = {};
 
 export async function transpileToJs(file: string) {
 	const dest = file.replace(/\.[^\.]+$/, ".js");
 	const buffer = await Bun.file(file).text();
 	const { code: js } = await swc.transform(buffer, {
 		filename: path.basename(file),
-		sourceMaps: false,
+		isModule: true,
 		jsc: {
 			baseUrl: ".",
+			experimental: {
+				plugins: [["swc-remapper", { classmap }]],
+			},
 			parser: {
 				syntax: "typescript",
 				tsx: true,
 				decorators: true,
 				dynamicImport: true,
 			},
+			target: "esnext",
 			transform: {
 				decoratorVersion: "2022-03",
 				react: {
@@ -29,10 +37,9 @@ export async function transpileToJs(file: string) {
 					pragmaFrag: "S.React.Fragment",
 				},
 			},
-			target: "esnext",
 			loose: false,
 		},
-		isModule: true,
+		sourceMaps: false,
 	});
 	await Bun.write(dest, js);
 }
@@ -52,6 +59,7 @@ export async function transpileToCss(file: string, moduleFiles: string[]) {
 			},
 		}),
 		autoprefixer({}),
+		postcssRemapper({ classmap }),
 	]);
 	const p = await PostCSSProcessor.process(buffer, { from: file });
 	await Bun.write(dest, p.css);
