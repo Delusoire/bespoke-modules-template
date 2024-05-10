@@ -23,14 +23,12 @@ namespace plugin {
 	}
 }
 
-const SEP = "__";
-
 export default function ({ classmap }: plugin.Options) {
 	return {
 		postcssPlugin: "postcss-remapper",
 		prepare() {
 			function renameNode(node: selectorParser.ClassName) {
-				const newName = node.value.split(SEP).reduce((obj, prop) => obj[prop], classmap);
+				const newName = node.value.split("__").reduce((obj, prop) => obj[prop.replace("_", "-")], classmap);
 				if (typeof newName === "string") {
 					node.value = newName;
 				}
