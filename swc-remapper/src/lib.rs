@@ -1,3 +1,4 @@
+use std::alloc::Global;
 use std::collections::HashMap;
 
 use serde::Deserialize;
@@ -10,14 +11,24 @@ struct Transform {
     pub config: Config,
 }
 
+impl Transform {
+    fn apply_classmap_right_left(&self, expr: &Box<Expr, Global>) -> Option<Stmt> {
+        if let Expr::Member(m) = &**expr {
+            // ...
+        }
+        None
+    }
+}
+
 impl Fold for Transform {
     noop_fold_type!();
 
     fn fold_stmt(&mut self, stmt: Stmt) -> Stmt {
         if let Stmt::Expr(e) = &stmt {
-            if let Expr::Member(m) = &*e.expr {
-                m.obj
-            }
+            match self.apply_classmap_right_left(&e.expr) {
+                Some(s) => return s,
+                None => {}
+            };
         }
         stmt.fold_children_with(self)
     }
