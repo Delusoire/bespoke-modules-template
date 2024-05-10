@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
 use serde::Deserialize;
-use swc_core::common::{Spanned, SyntaxContext};
-use swc_core::ecma::ast::{Expr, ExprStmt, Lit, MemberProp, Stmt};
-use swc_core::ecma::visit::{noop_fold_type, Fold};
+use swc_core::common::SyntaxContext;
+use swc_core::ecma::ast::{Expr, Lit, MemberProp};
+use swc_core::ecma::visit::{as_folder, noop_visit_mut_type, VisitMut};
 use swc_core::ecma::{ast::Program, visit::FoldWith};
 use swc_core::plugin::{plugin_transform, proxies::TransformPluginProgramMetadata};
 
@@ -53,23 +53,18 @@ impl Transform {
     }
 }
 
-impl Fold for Transform {
-    noop_fold_type!();
+impl VisitMut for Transform {
+    noop_visit_mut_type!();
 
-    fn fold_stmt(&mut self, stmt: Stmt) -> Stmt {
-        if let Stmt::Expr(e) = &stmt {
-            if let Some(expr) = self.apply_classmap(&e.expr) {
-                return Stmt::Expr(ExprStmt {
-                    span: expr.span(),
-                    expr,
-                });
-            };
+    fn visit_mut_expr(&mut self, expr: &mut Expr) {
+        if let Some(e) = self.apply_classmap(&Box::new(expr.clone())) {
+            *expr = *e
         }
-        stmt.fold_children_with(self)
     }
 }
 
 #[derive(Clone, Debug, Deserialize)]
+#[serde(untagged)]
 pub enum ClassMap {
     Str(String),
     Map(HashMap<String, ClassMap>),
@@ -88,31 +83,16 @@ pub struct Config {
 }
 
 #[plugin_transform]
-pub fn process_transform(program: Program, data: TransformPluginProgramMetadata) -> Program {
+pub fn process_transform(program: Program, metadata: TransformPluginProgramMetadata) -> Program {
     let config = serde_json::from_str::<Config>(
-        &data
+        &metadata
             .get_transform_plugin_config()
-            .expect("failed to get plugin config for swc-remapper"),
+            .expect("failed to get plugin config"),
     )
     .expect("invalid config");
-    let unresolved_ctx = SyntaxContext::empty().apply_mark(data.unresolved_mark);
-    program.fold_with(&mut Transform {
+    let unresolved_ctx = SyntaxContext::empty().apply_mark(metadata.unresolved_mark);
+    program.fold_with(&mut as_folder(Transform {
         config,
         unresolved_ctx,
-    })
+    }))
 }
-
-// test_inline!(
-//     Default::default(),
-//     |_| {
-//         let mut classmap: ClassMap = HashMap::new();
-//         classmap.insert("a".to_string(), ClassMapValue::Str("b".to_string()));
-//         let config = Config { classmap };
-//         Transform { config }
-//     },
-//     test,
-//     // Input codes
-//     r#"CLASSMAP.a;"#,
-//     // Output codes after transformed with plugin
-//     r#"b;"#
-// );

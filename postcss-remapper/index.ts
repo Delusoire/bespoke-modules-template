@@ -14,8 +14,7 @@
  */
 
 import selectorParser from "postcss-selector-parser";
-
-type ClassMap = Record<string, string | ClassMap>;
+import { ClassMap } from "../transpile";
 
 namespace plugin {
 	export interface Options {
