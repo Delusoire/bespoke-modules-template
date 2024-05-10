@@ -15,7 +15,7 @@ const classmap = {};
 export async function transpileToJs(file: string) {
 	const dest = file.replace(/\.[^\.]+$/, ".js");
 	const buffer = await Bun.file(file).text();
-	const { code: js } = await swc.transform(buffer, {
+	const { code } = await swc.transform(buffer, {
 		filename: path.basename(file),
 		isModule: true,
 		jsc: {
@@ -41,7 +41,7 @@ export async function transpileToJs(file: string) {
 		},
 		sourceMaps: false,
 	});
-	await Bun.write(dest, js);
+	await Bun.write(dest, code);
 }
 
 export async function transpileToCss(file: string, moduleFiles: string[]) {

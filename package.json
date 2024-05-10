@@ -20,5 +20,8 @@
 	},
 	"workspaces": [
 		"*/*"
-	]
+	],
+	"dependencies": {
+		"swc-remapper": "file:swc-remapper"
+	}
 }
