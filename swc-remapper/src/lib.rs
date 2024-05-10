@@ -35,12 +35,11 @@ impl Transform {
                 if let Some(&ClassMap::Str(s)) = fcm.as_ref() {
                     return Some(s.to_string());
                 }
-                return None;
             }
             Expr::Member(m) => {
                 if let MemberProp::Ident(i) = &m.prop {
                     idents.push(i.sym.to_string());
-                    self.apply_classmap_rtl_recur(&m.obj, idents);
+                    return self.apply_classmap_rtl_recur(&m.obj, idents);
                 }
             }
             _ => {}
