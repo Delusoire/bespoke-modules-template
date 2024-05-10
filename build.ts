@@ -29,8 +29,6 @@ function readJSON<T>(path: string | URL): Promise<Awaited<T>> {
 	return Bun.file(path).json()
 }
 
-
-
 // TODO: add cli options for these
 const classmap = await readJSON<ClassMap>("./classmap.json")
 const metadata = await readJSON<Metadata>("./metadata.json");
