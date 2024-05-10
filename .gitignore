@@ -1,5 +1,7 @@
 */
 
+.swc/
+
 node_modules/
 bun.lockb
 
