@@ -1,0 +1,19 @@
+{
+   "editor.formatOnSave": true,
+   "[javascript]": {
+      "editor.defaultFormatter": "biomejs.biome"
+   },
+   "[typescript]": {
+      "editor.defaultFormatter": "biomejs.biome"
+   },
+   "[json]": {
+      "editor.defaultFormatter": "biomejs.biome"
+   },
+   "explorer.fileNesting.enabled": true,
+   "explorer.fileNesting.expand": false,
+   "explorer.fileNesting.patterns": {
+      "*.ts": "${capture}.js",
+      "*.tsx": "${capture}.js",
+      "*.scss": "${capture}.css"
+   }
+}
