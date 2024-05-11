@@ -7,6 +7,25 @@ use swc_core::ecma::visit::{as_folder, noop_visit_mut_type, VisitMut};
 use swc_core::ecma::{ast::Program, visit::FoldWith};
 use swc_core::plugin::{plugin_transform, proxies::TransformPluginProgramMetadata};
 
+#[derive(Clone, Debug, Deserialize)]
+#[serde(untagged)]
+pub enum ClassMap {
+    Str(String),
+    Map(HashMap<String, ClassMap>),
+}
+
+impl Default for ClassMap {
+    fn default() -> Self {
+        ClassMap::Map(Default::default())
+    }
+}
+
+#[derive(Clone, Debug, Deserialize)]
+pub struct Config {
+    #[serde(default)]
+    pub classmap: ClassMap,
+}
+
 struct Transform {
     config: Config,
     unresolved_ctx: SyntaxContext,
@@ -62,25 +81,6 @@ impl VisitMut for Transform {
             *expr = *e
         }
     }
-}
-
-#[derive(Clone, Debug, Deserialize)]
-#[serde(untagged)]
-pub enum ClassMap {
-    Str(String),
-    Map(HashMap<String, ClassMap>),
-}
-
-impl Default for ClassMap {
-    fn default() -> Self {
-        ClassMap::Map(Default::default())
-    }
-}
-
-#[derive(Clone, Debug, Deserialize)]
-pub struct Config {
-    #[serde(default)]
-    pub classmap: ClassMap,
 }
 
 #[plugin_transform]

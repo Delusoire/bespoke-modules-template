@@ -1,9 +1,9 @@
-*/
-!*-remapper/
+/*/
+!/*-remapper/
 
-.swc/
+/.swc/
 
-node_modules/
-bun.lockb
+/node_modules/
+/bun.lockb
 
-vault.json
+/vault.json
