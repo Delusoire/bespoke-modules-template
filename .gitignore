@@ -1,9 +1,6 @@
-/*/
-!/*-remapper/
+*
 
-/.swc/
-
-/node_modules/
-/bun.lockb
-
-/vault.json
+!/biome.json
+!/tsconfig.json
+!/README.md
+!/tailwind.config.ts
