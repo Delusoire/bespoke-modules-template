@@ -1,5 +1,6 @@
 *
 
+!/.vscode/**
 !/biome.json
 !/tsconfig.json
 !/README.md
