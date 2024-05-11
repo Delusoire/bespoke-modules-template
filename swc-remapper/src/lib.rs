@@ -20,9 +20,10 @@ impl Transform {
     ) -> Option<String> {
         match &**expr {
             Expr::Ident(i) => {
-                if i.sym != "CLASSMAP" || i.span.ctxt != self.unresolved_ctx {
+                if i.span.ctxt != self.unresolved_ctx {
                     return None;
                 }
+                idents.push(i.sym.to_string());
                 let fcm = idents.iter().rev().fold(
                     Some(&self.config.classmap),
                     |ocmv: Option<&ClassMap>, ident| {

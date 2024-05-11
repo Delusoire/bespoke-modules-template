@@ -27,7 +27,7 @@ export default function ({ classmap }: plugin.Options) {
 		postcssPlugin: "postcss-remapper",
 		prepare() {
 			function renameNode(node: selectorParser.ClassName) {
-				const newName = node.value.split("__").reduce((obj, prop) => obj[prop.replace("_", "-")], classmap);
+				const newName = node.value.split("__").reduce((obj, prop) => obj[prop.replace("-", "_")], classmap);
 				if (typeof newName === "string") {
 					node.value = newName;
 				}

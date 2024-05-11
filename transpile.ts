@@ -9,7 +9,6 @@ import tailwindcss from "tailwindcss";
 import autoprefixer from "autoprefixer";
 import postcssRemapper from "./postcss-remapper";
 
-
 export type ClassMap = Record<string, string | ClassMap>
 
 export class Transpiler {
@@ -24,7 +23,7 @@ export class Transpiler {
 			jsc: {
 				baseUrl: ".",
 				experimental: {
-					plugins: [["swc-remapper", { classmap: this.classmap }]],
+					plugins: [["swc-remapper", { classmap: { CLASSMAP: this.classmap }}]],
 				},
 				parser: {
 					syntax: "typescript",
