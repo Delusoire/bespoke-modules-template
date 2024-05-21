@@ -3,13 +3,13 @@
    "tags": [
       "example"
    ],
-   "preview": "./assets/PREVIEW.png",
+   "preview": "assets/PREVIEW.png",
    "version": "1.0.0",
    "authors": [
       "Delusoire"
    ],
    "description": "Example module template",
-   "readme": "./assets/README.md",
+   "readme": "assets/README.md",
    "entries": {
       "js": "index.js",
       "css": "index.css",

@@ -1,7 +1,2 @@
-*
-
-!/.vscode/
-!/.vscode/*
-!/tsconfig.json
-!/README.md
-!/tailwind.config.ts
+/node_modules/
+/bun.lockb
