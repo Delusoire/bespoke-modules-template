@@ -1,0 +1,11 @@
+{
+   "example": {
+      "module": {
+         "v": {
+            "1.0.0": {
+               "artifacts": ["https://github/Delusoire/bespoke-module-template/releases/download/src/example@1.0.0/example.module@1.0.0.zip"]
+            }
+         }
+      }
+   }
+}
