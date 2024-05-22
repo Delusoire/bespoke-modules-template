@@ -3,6 +3,6 @@
     "tailor": "node node_modules/@delu/tailor/cli.js"
   },
   "devDependencies": {
-    "@delu/tailor": "npm:@jsr/delu__tailor@^0.1.5"
+    "@delu/tailor": "npm:@jsr/delu__tailor@^0.1.6"
   }
 }
