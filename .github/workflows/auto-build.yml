@@ -42,6 +42,6 @@ jobs:
                 IFS="@" read -r ID VERSION <<< "$ARCHIVE"
                 IFS="." read -r -a IDS <<< "$ID"
                 ID="$(printf '["%s"]' "${IDS[@]}")"
-                VERSION="${ARCHIVE%.zip}"
+                VERSION="${VERSION%.zip}"
                 yq -i ".${ID}.v[\"${VERSION/?}\"].artifacts += [\"${URL}\"]" repo.json
               done
