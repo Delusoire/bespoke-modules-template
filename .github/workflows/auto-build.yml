@@ -25,9 +25,10 @@ jobs:
               mkdir dist
               for DIR in module/dist/*; do
                 pushd $DIR
-                ARCHIVE="$(basename "$DIR").zip"
-                7z a -bb0 -sdel "$ARCHIVE" ./*
-                mv "$ARCHIVE" $HOME/
+                BASE="$(basename "$DIR")"
+                cp metadata.json "${HOME}/dist/${BASE}.metadata.json"
+                7z a -bb0 -sdel "${BASE}.zip" ./*
+                mv "${BASE}.zip" "${HOME}/dist/"
                 popd
               done
          - name: Release

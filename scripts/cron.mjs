@@ -64,10 +64,9 @@ if ( commits.length ) {
       const metadata = await readJSON( path.join( modulePath, "metadata.json" ) );
 
       for ( const { classmap, version: spVersion, timestamp: cmTimestamp } of classmapInfos ) {
-         const author = metadata.authors[ 0 ];
-         const name = metadata.name;
-         const version = metadata.version;
-         const fingerprint = `${ author }.${ name }@v${ version }+sp-${ spVersion }-cm-${ cmTimestamp }`;
+         const m = { ...metadata }
+         m.version = `${ metadata.version }+sp-${ spVersion }-cm-${ cmTimestamp }`;
+         const fingerprint = `${ m.authors[0] }.${ m.name }@v${m.version}`;
          const outDir = path.join( modulePath, "dist", fingerprint );
 
          const transpiler = new Transpiler( classmap );
@@ -75,6 +74,7 @@ if ( commits.length ) {
 
          try {
             await builder.build( modulePath );
+            await fs.writeFile(file.join(outDir, "metadata.json"), JSON.stringify(m))
          } catch ( err ) {
             await fs.rm( outDir, { recursive: true, force: true } );
             console.warn( `Build for ${ fingerprint } failed with error: ${ err }` );
