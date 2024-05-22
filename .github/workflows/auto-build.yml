@@ -31,6 +31,17 @@ jobs:
                 popd
               done
          - name: Release
+           id: release
            uses: softprops/action-gh-release@v2
            with:
               files: dist/*
+         - name: Update repo.json
+           run: |
+              for URL in ${{ fromJSON(steps.release.outputs.assets).*.browser_download_url }}; do
+                ARCHIVE="${URL##*/}"
+                IFS="@" read -r ID VERSION <<< "$ARCHIVE"
+                IFS="." read -r -a IDS <<< "$ID"
+                ID="$(printf '["%s"]' "${IDS[@]}")"
+                VERSION="${ARCHIVE%.zip}"
+                yq -i ".${ID}.v[\"${VERSION/?}\"].artifacts += [\"${URL}\"]" repo.json
+              done
