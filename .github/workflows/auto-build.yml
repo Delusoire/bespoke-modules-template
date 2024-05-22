@@ -1,4 +1,4 @@
-name: Build module with latest classmaps
+name: Build module with the latest classmaps from github.com/spicetify/classmaps
 
 on:
    schedule:
@@ -16,7 +16,7 @@ jobs:
          - name: Install Node v22
            uses: actions/setup-node@v1
            with:
-              node-version: 20
+              node-version: 22
          - name: Prepare environment
            run: npm i
          - name: Build
