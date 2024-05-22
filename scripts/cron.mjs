@@ -1,4 +1,5 @@
 import path from "node:path"
+import fs from "node:fs/promises"
 import { Octokit } from "octokit";
 import {build, Builder, readJSON, Transpiler} from "@delu/tailor"
 
@@ -43,10 +44,12 @@ const sinceDate = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
 const commits = await fetchCommitsSince({ owner, repo, sinceDate });
 
-if (commits.length) {
-   const allAddedFiles = await fetchAddedFiles( { owner, repo, commit: commits.at( -1 ) } );
+if ( commits.length ) {
+   const earlistCommit = commits.at( -1 )
+   const allAddedFiles = await fetchAddedFiles( { owner, repo, commit: earlistCommit } );
 
-   const metadata = await readJSON( "./module/metadata.json" )
+   const modulePath = "module"
+   const metadata = await readJSON( path.join(modulePath, "metadata.json" ))
    const classmapPathRe = /^(?<version>\d+\.\d+\.\d+)\/classmap-(?<timestamp>\d{13})\.json$/
 
    for ( const file of allAddedFiles ) {
@@ -60,11 +63,16 @@ if (commits.length) {
       const classmap = await fetch( file.raw_url ).then( res => res.json() )
 
       const fingerprint = `sp-${version}-cm-${timestamp}`
-      const outDir = path.join("module", "dist", fingerprint)
+      const outDir = path.join(modulePath, "dist", fingerprint)
 
       const transpiler = new Transpiler(classmap)
       const builder = new Builder(transpiler, { metadata, outDir, copyUnknown: true })
 
-      await builder.build("module")
+      try {
+         await builder.build( modulePath );
+      } catch ( err ) {
+         await fs.rm(outDir, { recursive: true, force: true })
+         console.warn(`Build for ${outDir} failed with error: ${err}`)
+      }
    }
 }
