@@ -1,8 +1,12 @@
 {
   "scripts": {
-    "tailor": "node node_modules/@delu/tailor/cli.js"
+    "tailor": "node node_modules/@delu/tailor/cli.js",
+    "cron": "npde scripts/cron.mjs"
   },
   "devDependencies": {
     "@delu/tailor": "npm:@jsr/delu__tailor@^0.1.6"
+  },
+  "dependencies": {
+    "octokit": "^4.0.2"
   }
 }
