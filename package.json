@@ -1,13 +1,10 @@
 {
-  "scripts": {
-    "tailor": "node node_modules/@delu/tailor/cli.js",
-    "cron": "npde scripts/cron.mjs"
-  },
-  "devDependencies": {
-    "@delu/tailor": "npm:@jsr/delu__tailor@^0.1.6"
-  },
-  "dependencies": {
-    "octokit": "^4.0.2"
-  },
-  "type": "module"
+	"scripts": {
+		"b": "deno run -A jsr:@delu/tailor/cli -b",
+		"cron": "node scripts/cron.mjs"
+	},
+	"devDependencies": {
+		"octokit": "^4.0.2"
+	},
+	"type": "module"
 }
