@@ -1,0 +1,13 @@
+{
+	"modules": {
+		"/owner/module": {
+			"v": {
+				"1.0.0": {
+					"artifacts": [
+						"https://github/owner/spicetify-modules/releases/download/modules/module@1.0.0/owner.module@1.0.0.zip"
+					]
+				}
+			}
+		}
+	}
+}
