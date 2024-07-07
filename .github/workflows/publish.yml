@@ -7,6 +7,7 @@ on:
 
 jobs:
    publish:
+      if: "!github.event.release.prerelease"
       name: Publish
       runs-on: ubuntu-latest
 
